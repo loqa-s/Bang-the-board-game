@@ -83,4 +83,6 @@ function getDeck() {
 
 const deck = getDeck();
 
+console.log(deck);
+
 console.log(`Сейчас в колоде ${deck.length} карт`);
