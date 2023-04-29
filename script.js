@@ -27,12 +27,13 @@ console.log(numberCharacter, numberRole);
 let player1 = {
     character: characters[numberCharacter].name,
     lives: characters[numberCharacter].lives,
-    role: roles[numberRole]
+    role: roles[numberRole],
+    note: characters[numberCharacter].note,
 };
 
 console.log(player1);
 
-let player1Cards = {};
+let player1Cards = [];
 
 // тут блок чисто про генерацию колоды
 
@@ -82,7 +83,23 @@ function getDeck() {
 };
 
 const deck = getDeck();
-
 console.log(deck);
+
+console.log(`Сейчас в колоде ${deck.length} карт`);
+
+// тут берем количество кард, исходя из кол-ва жизней
+
+console.log(`У вас ${player1.lives} жизни, поэтому вы берете ${player1.lives} карты из колоды!`);
+
+function getCard () {
+    for (let i = 0; i < player1.lives; i++) {
+        let shiftedCards = deck.shift();
+        player1Cards.push(shiftedCards);
+    }
+    return player1Cards; 
+}
+
+console.log(`Вы взяли из колоды такие карты:`);
+console.log(getCard());
 
 console.log(`Сейчас в колоде ${deck.length} карт`);
