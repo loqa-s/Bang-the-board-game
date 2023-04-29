@@ -1,3 +1,4 @@
+import { deck } from "./deck.js";
 
 // тут наполняем игрока
 
@@ -10,9 +11,12 @@ const characters = {
 const roles = {
     1: `bandit`,
     2: `renegate`,
-    3: `sheriffsCutie`,
+    3: `deputy`,
     4: `sheriff`
 }
+
+let numberCharacter;
+let numberRole;
 
 const randomNumbers = function() {
     numberCharacter = Math.trunc(Math.random() * 3) + 1;
@@ -20,7 +24,7 @@ const randomNumbers = function() {
     return numberCharacter, numberRole;
 }
 
-randomNumbers()
+randomNumbers();
 
 console.log(numberCharacter, numberRole);
 
@@ -40,57 +44,12 @@ console.log(player1);
 
 // тут блок чисто про генерацию колоды
 
-const suits = ["spades", "diamonds", "clubs", "hearts"];
-const values = ["2", "3", "4", "5", "6", "7", "8", "8", "9", "9", "10", "10", "J", "J", "Q", "Q", "K", "K", "A", "A"];
-const Mods = [`Duel`, `Duel`, `Duel`, `Wells Fargo`, `Stagecoach`, `Stagecoach`, `Dynamite`, `Appaloosa`, `Horse`, `Horse`, `Saloon`, `Volcanic`, `Volcanic`, `Schofield`, `Schofield`, `Schofield`, `Remington`, `Rev. Carabine`, `Winchester`, `Jail`, `Jail`, `Jail`, `Gatling`, `Barrel`, `Injuns!`, `Barrel`, `Injuns!`, `Mistress`, `Mistress`, `Mistress`, `Mistress`, `Panic!`, `Panic!`, `Panic!`, `Panic!`, `Beer`, `Beer`, `Beer`, `Beer`, `Beer`, `Beer`, `General Store`, `General Store`];
 
-
-function getDeck() {
-
-    let deck = new Array();
-
-    for(let i = 0; i < 25; i++) {
-        let card = 'Bang!'; 
-        Mods.push(card);
-    };
-
-    for(let i = 0; i < 12; i++) {
-        let card = 'Missed!';
-        Mods.push(card);
-    }
-
-    let card = {};
-
-	for(let i = 0; i < suits.length; i++) {
-		for(let x = 0; x < values.length; x++) {
-			card = {Value: values[x], Suit: suits[i]};
-			deck.push(card);
-		}
-	};
-
-    const moddedDeck = deck.map((item, i) => {
-        return {Value: item.Value, Suit: item.Suit, Modificanto: Mods[i]};
-    });
-
-	for (let i = 0; i < 1000; i++) {
-		let location1 = Math.floor((Math.random() * moddedDeck.length));
-		let location2 = Math.floor((Math.random() * moddedDeck.length));
-		let tmp = moddedDeck[location1];
-
-		moddedDeck[location1] = moddedDeck[location2];
-		moddedDeck[location2] = tmp;
-	
-    };
-
-	return moddedDeck;
-};
-
-const deck = getDeck();
 console.log(deck);
 
 console.log(`Сейчас в колоде ${deck.length} карт`);
 
-// тут берем количество кард, исходя из кол-ва жизней
+// тут берем количество карт, исходя из кол-ва жизней
 
 console.log(`У вас ${player1.lives} жизни, поэтому вы берете ${player1.lives} карты из колоды!`);
 
