@@ -24,16 +24,19 @@ randomNumbers()
 
 console.log(numberCharacter, numberRole);
 
+let player1Cards = [];
+
 let player1 = {
     character: characters[numberCharacter].name,
     lives: characters[numberCharacter].lives,
     role: roles[numberRole],
     note: characters[numberCharacter].note,
+    cardsInHand: player1Cards,
+    cardsOnTable: [],
+    isKilled: false
 };
 
 console.log(player1);
-
-let player1Cards = [];
 
 // тут блок чисто про генерацию колоды
 
@@ -91,7 +94,7 @@ console.log(`Сейчас в колоде ${deck.length} карт`);
 
 console.log(`У вас ${player1.lives} жизни, поэтому вы берете ${player1.lives} карты из колоды!`);
 
-function getCard () {
+function getCardStart () {
     for (let i = 0; i < player1.lives; i++) {
         let shiftedCards = deck.shift();
         player1Cards.push(shiftedCards);
@@ -99,7 +102,20 @@ function getCard () {
     return player1Cards; 
 }
 
-console.log(`Вы взяли из колоды такие карты:`);
-console.log(getCard());
+console.log(`Сейчас у вас в руке:`);
+console.log(getCardStart());
+console.log(`Сейчас в колоде ${deck.length} карт`);
 
+function getCardTurn () {
+    for (let i = 0; i < 2; i++) {
+        let shiftedCards = deck.shift();
+        player1Cards.push(shiftedCards);
+    }
+    return player1Cards; 
+}
+
+getCardTurn()
+console.log(`Сейчас ваш ход, поэтому вы берете из колоды 2 карты`);
+console.log(`Сейчас у вас в руке:`);
+console.log(player1Cards);
 console.log(`Сейчас в колоде ${deck.length} карт`);
