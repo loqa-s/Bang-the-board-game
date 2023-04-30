@@ -48,14 +48,26 @@ const createPlayer = function() {
         true,
         );
     return player;
-}
+};
+
 
 export const makePlayers = function() {
 
-    for (let i = 0; i < lobbyPlayers; i++) {
-        randomNumbers();
-        let temp = createPlayer();
-        gamePlayers.push(temp);
-    }
+    const loopTemp = function () {
+        for (let i = 0; i < lobbyPlayers; i++) {
+            randomNumbers();
+            let temp = createPlayer();
+            gamePlayers.push(temp); 
+        }
+        return gamePlayers;
+    };
+
+    loopTemp();
+
+    const hasDuplicates = gamePlayers.some((element, index) => index !== gamePlayers.indexOf(element));
+    console.log(hasDuplicates);
+
+    if (hasDuplicates) console.log(`!WE HAVE REPLICANTS IN HERE!`);
+
     return gamePlayers;
-}
+};
