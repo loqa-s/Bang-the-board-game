@@ -19,7 +19,7 @@ const randomNumbers = function() {
 //////////////////////////////////////////////////////////
 
 class Player {
-    constructor (_nickName, _character, _lives, _role, _note, _cardsInHand, _cardsOnTable, _isKilled) {
+    constructor (_nickName, _character, _lives, _role, _note, _cardsInHand, _cardsOnTable, _isKilled, _isFirstTurn) {
         this.nickName = _nickName,
         this.character = _character,
         this.lives = _lives,
@@ -27,11 +27,12 @@ class Player {
         this.note = _note,
         this.cardsInHand = _cardsInHand,
         this.cardsOnTable = _cardsOnTable,
-        this.isKilled = _isKilled
+        this.isKilled = _isKilled,
+        this.isFirstTurn = _isFirstTurn
     }
 };
 
-let lobbyPlayers = 2;
+let lobbyPlayers = 3;
 export let gamePlayers = [];
 
 const createPlayer = function() {
@@ -44,7 +45,7 @@ const createPlayer = function() {
         [],
         [],
         false,
-        1,
+        true,
         );
     return player;
 }

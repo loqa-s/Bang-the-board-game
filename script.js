@@ -1,31 +1,71 @@
 import { deck } from "./deck.js";
 import { makePlayers, gamePlayers } from "./players.js";
 
-let player1Cards = [];
+const btnTurn = document.querySelector(`.btn--turn`);
 
-// тут блок чисто про генерацию колоды
+makePlayers();
 
-console.log(makePlayers());
-
-console.log(deck);
-
-console.log(`Сейчас в колоде ${deck.length} карт`);
-
-// тут берем количество карт, исходя из кол-ва жизней
-
-// console.log(`У вас ${player00.lives} жизни, поэтому вы берете ${player00.lives} карты из колоды!`);
-
-function getCardStart () {
-    for (let i = 0; i < gamePlayers[0].lives; i++) {
-        let shiftedCards = deck.shift();
-        player1Cards.push(shiftedCards);
-    }
-    return player1Cards; 
+let initialState = {
+    numberPlayers: gamePlayers.length,
+    whoseTurn: 1,
+    gameOver: false,
 }
 
-console.log(`Сейчас у вас в руке:`);
-console.log(getCardStart());
-console.log(`Сейчас в колоде ${deck.length} карт`);
+console.log(initialState);
+
+const gameTurn = function () {
+
+    let turnPlayer = {};
+
+    function getCardStart (player) {
+        for (let i = 0; i < player.lives; i++) {
+            let shiftedCards = deck.shift();
+            player.cardsInHand.push(shiftedCards);
+        }; 
+    };
+
+    const turnState = function () {
+        turnPlayer = gamePlayers[initialState.whoseTurn-1]; 
+        console.log(`Сейчас ход: ${turnPlayer.character}. Игрок ${initialState.whoseTurn} в списке`);
+        (initialState.whoseTurn === gamePlayers.length) ? initialState.whoseTurn = 1 : initialState.whoseTurn++;
+        // console.log(initialState.whoseTurn);
+        if (gamePlayers[initialState.whoseTurn-1].isFirstTurn) {
+            console.log(gamePlayers[initialState.whoseTurn-1].isFirstTurn);
+            getCardStart(turnPlayer);
+            gamePlayers[initialState.whoseTurn-1].isFirstTurn = false;
+            console.log(gamePlayers[initialState.whoseTurn-1].isFirstTurn);
+        };
+        console.log(`Сейчас в колоде ${deck.length} карт`);
+        console.log(gamePlayers[initialState.whoseTurn-1].cardsInHand);
+    }
+
+    if (initialState.whoseTurn === 1) {
+        turnState();
+        return;
+    };
+
+    if (initialState.whoseTurn === 2) {
+        turnState();
+        return;
+    };
+
+    if (initialState.whoseTurn === gamePlayers.length) {
+        turnState();
+        return;
+    };
+
+    console.log(`Сейчас ход игрока ${initialState.whoseTurn}. Это - ${turnPlayer}`);
+    
+}
+
+console.log(gamePlayers);
+// console.log(deck);
+
+console.log(gameTurn());
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+// тут берем количество карт, исходя из кол-ва жизней
+// console.log(`У вас ${player00.lives} жизни, поэтому вы берете ${player00.lives} карты из колоды!`);
 
 function getCardTurn () {
     for (let i = 0; i < 2; i++) {
@@ -35,9 +75,6 @@ function getCardTurn () {
     return player1Cards; 
 }
 
-getCardTurn()
-console.log(`Сейчас ваш ход, поэтому вы берете из колоды 2 карты`);
-console.log(`Сейчас у вас в руке:`);
-console.log(player1Cards);
-console.log(`Сейчас в колоде ${deck.length} карт`);
-
+btnTurn.addEventListener(`click`, function () {
+    gameTurn();
+  });
