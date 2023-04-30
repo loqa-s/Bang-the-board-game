@@ -18,6 +18,7 @@ const gameTurn = function () {
     let turnPlayer = {};
 
     function getCardStart (player) {
+    // Берем количество карт из колоды, исходя из количества жизней.
         for (let i = 0; i < player.lives; i++) {
             let shiftedCards = deck.shift();
             player.cardsInHand.push(shiftedCards);
@@ -28,15 +29,13 @@ const gameTurn = function () {
         turnPlayer = gamePlayers[initialState.whoseTurn-1]; 
         console.log(`Сейчас ход: ${turnPlayer.character}. Игрок ${initialState.whoseTurn} в списке`);
         (initialState.whoseTurn === gamePlayers.length) ? initialState.whoseTurn = 1 : initialState.whoseTurn++;
-        // console.log(initialState.whoseTurn);
         if (gamePlayers[initialState.whoseTurn-1].isFirstTurn) {
-            console.log(gamePlayers[initialState.whoseTurn-1].isFirstTurn);
             getCardStart(turnPlayer);
             gamePlayers[initialState.whoseTurn-1].isFirstTurn = false;
-            console.log(gamePlayers[initialState.whoseTurn-1].isFirstTurn);
+            console.log(`gamePlayers[initialState.whoseTurn-1].isFirstTurn =`, gamePlayers[initialState.whoseTurn-1].isFirstTurn);
         };
+        console.log(turnPlayer.cardsInHand);
         console.log(`Сейчас в колоде ${deck.length} карт`);
-        console.log(gamePlayers[initialState.whoseTurn-1].cardsInHand);
     }
 
     if (initialState.whoseTurn === 1) {
@@ -59,9 +58,6 @@ const gameTurn = function () {
 }
 
 console.log(gamePlayers);
-// console.log(deck);
-
-console.log(gameTurn());
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 // тут берем количество карт, исходя из кол-ва жизней
