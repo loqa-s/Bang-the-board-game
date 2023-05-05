@@ -1,73 +1,52 @@
 import { characters } from "./characters.js";
 
 const roles = {
-    1: `bandit`,
-    2: `renegate`,
-    3: `deputy`,
-    4: `sheriff`
-}
+  1: `bandit`,
+  2: `renegate`,
+  3: `deputy`,
+  4: `sheriff`,
+};
 
-let numberCharacter;
-let numberRole;
+const rollRole = function () {
+  numberRole = Math.trunc(Math.random() * 4) + 1;
+  return numberRole;
+};
 
-const randomNumbers = function() {
-    numberCharacter = Math.trunc(Math.random() * 3) + 1;
-    numberRole = Math.trunc(Math.random() * 4) + 1;
-    return numberCharacter, numberRole;
-}
+const rollCharacter = function () {
+  numberCharacter = Math.trunc(Math.random() * 3) + 1;
+  return numberCharacter;
+};
 
 //////////////////////////////////////////////////////////
 
-class Player {
-    constructor (_nickName, _character, _lives, _role, _note, _cardsInHand, _cardsOnTable, _isKilled, _isFirstTurn) {
-        this.nickName = _nickName,
-        this.character = _character,
-        this.lives = _lives,
-        this.role = _role,
-        this.note = _note,
-        this.cardsInHand = _cardsInHand,
-        this.cardsOnTable = _cardsOnTable,
-        this.isKilled = _isKilled,
-        this.isFirstTurn = _isFirstTurn
-    }
+const createPlayer = function () {
+  let player = {
+    nickName: `TESTING`,
+    character: characters[numberCharacter].name,
+    lives: characters[numberCharacter].lives,
+    role: roles[numberRole],
+    note: characters[numberCharacter].note,
+    cardsInHand: [],
+    cardsOnTable: [],
+    isKilled: false,
+    isFirstTurn: true,
+  };
+  return player;
 };
 
+let numberCharacter = 0;
+let numberRole = 0;
 let lobbyPlayers = 3;
-export let gamePlayers = [];
+let gamePlayers = [];
 
-const createPlayer = function() {
-    let player = new Player(
-        `PUP`, 
-        characters[numberCharacter].name, 
-        characters[numberCharacter].lives,
-        roles[numberRole],
-        characters[numberCharacter].note,
-        [],
-        [],
-        false,
-        true,
-        );
-    return player;
+const makePlayers = function () {
+  for (let i = 0; i < lobbyPlayers; i++) {
+    rollRole();
+    rollCharacter();
+    let temp = createPlayer();
+    gamePlayers.push(temp);
+  }
+  return gamePlayers;
 };
 
-
-export const makePlayers = function() {
-
-    const loopTemp = function () {
-        for (let i = 0; i < lobbyPlayers; i++) {
-            randomNumbers();
-            let temp = createPlayer();
-            gamePlayers.push(temp); 
-        }
-        return gamePlayers;
-    };
-
-    loopTemp();
-
-    const hasDuplicates = gamePlayers.some((element, index) => index !== gamePlayers.indexOf(element));
-    console.log(hasDuplicates);
-
-    if (hasDuplicates) console.log(`!WE HAVE REPLICANTS IN HERE!`);
-
-    return gamePlayers;
-};
+export { makePlayers, gamePlayers };
