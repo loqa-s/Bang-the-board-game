@@ -13,7 +13,12 @@ const rollRole = function () {
 };
 
 const rollCharacter = function () {
-  numberCharacter = Math.trunc(Math.random() * 3) + 1;
+  numberCharacter = Math.trunc(Math.random() * lobbyPlayers) + 1;
+  while (numberCharacterUsed.includes(numberCharacter)) {
+    console.log(`REPLICANT HAS BEEN ELIMINATED`);
+    numberCharacter = Math.trunc(Math.random() * lobbyPlayers) + 1;
+  }
+  numberCharacterUsed.push(numberCharacter);
   return numberCharacter;
 };
 
@@ -34,11 +39,6 @@ const createPlayer = function () {
   return player;
 };
 
-let numberCharacter = 0;
-let numberRole = 0;
-let lobbyPlayers = 3;
-let gamePlayers = [];
-
 const makePlayers = function () {
   for (let i = 0; i < lobbyPlayers; i++) {
     rollRole();
@@ -48,5 +48,11 @@ const makePlayers = function () {
   }
   return gamePlayers;
 };
+
+let numberCharacterUsed = [];
+let numberCharacter;
+let numberRole = 0;
+let lobbyPlayers = 3;
+let gamePlayers = [];
 
 export { makePlayers, gamePlayers };
