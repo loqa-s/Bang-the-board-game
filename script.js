@@ -1,83 +1,96 @@
 import { deck } from "./deck.js";
-import { makePlayers, gamePlayers } from "./players.js";
+import { makePlayers } from "./players.js";
 
 const btnTurn = document.querySelector(`.btn--turn`);
+const btnUseCard = document.querySelector(`.btn--useCard`);
 
-makePlayers();
+const gamePlayers = makePlayers();
 
-let initialState = {
-  numberPlayers: gamePlayers.length,
-  whoseTurn: 1,
-  gameOver: false,
-};
-
-console.log(initialState);
-
-const gameTurn = function () {
-  let turnPlayer = {};
-
-  function getCardStart(player) {
-    // Берем количество карт из колоды, исходя из количества жизней.
+const getCardStart = (player) => {
+  // В самом начале берем то количество карт, сколько у нас жизней
+  if (gamePlayers[gameState.whoseTurn - 1].isFirstTurn) {
     for (let i = 0; i < player.lives; i++) {
       let shiftedCards = deck.shift();
       player.cardsInHand.push(shiftedCards);
     }
+    gamePlayers[gameState.whoseTurn - 1].isFirstTurn = false;
   }
-
-  const turnState = function () {
-    turnPlayer = gamePlayers[initialState.whoseTurn - 1];
-    console.log(
-      `Сейчас ход: ${turnPlayer.character}. Игрок ${initialState.whoseTurn} в списке`
-    );
-    initialState.whoseTurn === gamePlayers.length
-      ? (initialState.whoseTurn = 1)
-      : initialState.whoseTurn++;
-    if (gamePlayers[initialState.whoseTurn - 1].isFirstTurn) {
-      getCardStart(turnPlayer);
-      gamePlayers[initialState.whoseTurn - 1].isFirstTurn = false;
-      console.log(
-        `gamePlayers[initialState.whoseTurn-1].isFirstTurn =`,
-        gamePlayers[initialState.whoseTurn - 1].isFirstTurn
-      );
-    }
-    console.log(turnPlayer.cardsInHand);
-    console.log(`Сейчас в колоде ${deck.length} карт`);
-  };
-
-  if (initialState.whoseTurn === 1) {
-    turnState();
-    return;
-  }
-
-  if (initialState.whoseTurn === 2) {
-    turnState();
-    return;
-  }
-
-  if (initialState.whoseTurn === gamePlayers.length) {
-    turnState();
-    return;
-  }
-
-  console.log(
-    `Сейчас ход игрока ${initialState.whoseTurn}. Это - ${turnPlayer}`
-  );
 };
 
-console.log(gamePlayers);
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-// тут берем количество карт, исходя из кол-ва жизней
-// console.log(`У вас ${player00.lives} жизни, поэтому вы берете ${player00.lives} карты из колоды!`);
-
-function getCardTurn() {
+const getCardTurn = () => {
+  // Каждый ход берем две карты из колоды
   for (let i = 0; i < 2; i++) {
     let shiftedCards = deck.shift();
     player1Cards.push(shiftedCards);
   }
   return player1Cards;
-}
+};
+
+const checkIfLastPlayer = () => {
+  //Смотрим последний ли игрок по порядку, чтобы сделать круг
+  gameState.whoseTurn > gamePlayers.length
+    ? (gameState.whoseTurn = 1)
+    : gameState.whoseTurn++;
+};
+
+const turnState = function () {
+  // Функция смотрит чей ход и сколько карт нужно брать
+  let turnPlayer = gamePlayers[gameState.whoseTurn - 1];
+  console.log(
+    `Сейчас ход: ${turnPlayer.character}. Игрок ${gameState.whoseTurn} в списке`
+  );
+  getCardStart(turnPlayer);
+
+  console.log(`Держит в руке ${turnPlayer.cardsInHand.length} карты!`);
+  console.log(turnPlayer.cardsInHand);
+  console.log(`В колоде ${deck.length} карт`);
+  console.log(gameState.whoseTurn);
+};
+
+const useCards = function () {
+  if (gameState.whoseTurn - 1 === 0) {
+    alert(`нельзя`);
+    return;
+  }
+  const targetedPlayer = prompt(
+    `В кого выстрелить, брат? 1? 2? 3? Ты, кстати, ${gameState.whoseTurn - 1}`
+  );
+};
+
+let gameState = {
+  // Игровое состояние
+  numberPlayers: gamePlayers.length,
+  whoseTurn: 1,
+  gameOver: false,
+};
+
+console.log(gameState);
+
+const gameTurn = function () {
+  // Система ходов
+  if (gameState.whoseTurn === 1) {
+    turnState();
+    return;
+  }
+
+  if (gameState.whoseTurn === 2) {
+    turnState();
+    return;
+  }
+
+  if (gameState.whoseTurn === gamePlayers.length) {
+    turnState();
+    return;
+  }
+};
+
+console.log(gamePlayers);
 
 btnTurn.addEventListener(`click`, function () {
   gameTurn();
+  checkIfLastPlayer();
+});
+
+btnUseCard.addEventListener(`click`, function () {
+  useCards();
 });
