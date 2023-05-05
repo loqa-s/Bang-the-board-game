@@ -14,4 +14,9 @@ export const characters = {
     lives: 3,
     note: `lives in a pit`,
   },
+  4: {
+    name: `Red Rock`,
+    lives: 3,
+    note: `old and nasty`,
+  },
 };

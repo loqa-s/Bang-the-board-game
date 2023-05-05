@@ -12,17 +12,21 @@ const rollRole = function () {
   return numberRole;
 };
 
+//////////////////////////////////////////////////////////
+///////////////////РАЗДЕЛЯЮЩАЯ ЛИНИЯ//////////////////////
+//////////////////////////////////////////////////////////
+
 const rollCharacter = function () {
-  numberCharacter = Math.trunc(Math.random() * lobbyPlayers) + 1;
+  numberCharacter =
+    Math.trunc(Math.random() * Object.keys(characters).length) + 1;
   while (numberCharacterUsed.includes(numberCharacter)) {
-    console.log(`REPLICANT HAS BEEN ELIMINATED`);
-    numberCharacter = Math.trunc(Math.random() * lobbyPlayers) + 1;
+    console.log(`REPLICANT HAS BEEN FOUND AND ELIMINATED 🐱‍👤`);
+    numberCharacter =
+      Math.trunc(Math.random() * Object.keys(characters).length) + 1;
   }
   numberCharacterUsed.push(numberCharacter);
   return numberCharacter;
 };
-
-//////////////////////////////////////////////////////////
 
 const createPlayer = function () {
   let player = {
