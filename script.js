@@ -26,9 +26,9 @@ const getCardTurn = () => {
   return player1Cards;
 };
 
-const checkIfLastPlayer = () => {
-  //Смотрим последний ли игрок по порядку, чтобы сделать круг
-  gameState.whoseTurn > gamePlayers.length
+const turnChanger = () => {
+  //меняем ходы в gameState, определяя чей сейчас ход.
+  gameState.whoseTurn === gameState.numberPlayers
     ? (gameState.whoseTurn = 1)
     : gameState.whoseTurn++;
 };
@@ -41,15 +41,17 @@ const turnState = function () {
   );
   getCardStart(turnPlayer);
 
+  gameState.turnCounter++;
   console.log(`Держит в руке ${turnPlayer.cardsInHand.length} карты!`);
   console.log(turnPlayer.cardsInHand);
   console.log(`В колоде ${deck.length} карт`);
   console.log(gameState.whoseTurn);
+  console.log(gameState.turnCounter);
 };
 
 const useCards = function () {
-  if (gameState.whoseTurn - 1 === 0) {
-    alert(`нельзя`);
+  if (gameState.whoseTurn - 1 <= 0) {
+    alert(`Ты сейчас ${gameState.whoseTurn - 1}, поэтому тебе нельзя`);
     return;
   }
   const targetedPlayer = prompt(
@@ -60,7 +62,8 @@ const useCards = function () {
 let gameState = {
   // Игровое состояние
   numberPlayers: gamePlayers.length,
-  whoseTurn: 1,
+  whoseTurn: 0,
+  turnCounter: 0,
   gameOver: false,
 };
 
@@ -88,9 +91,10 @@ console.log(gamePlayers);
 
 btnTurn.addEventListener(`click`, function () {
   gameTurn();
-  checkIfLastPlayer();
+  turnChanger();
 });
 
 btnUseCard.addEventListener(`click`, function () {
   useCards();
+  console.log(gameState.turnCounter);
 });
