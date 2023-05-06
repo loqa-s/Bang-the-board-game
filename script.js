@@ -50,12 +50,12 @@ const turnState = function () {
 };
 
 const useCards = function () {
-  if (gameState.whoseTurn - 1 <= 0) {
+  if (gameState.whoseTurn <= 0) {
     alert(`Ты сейчас ${gameState.whoseTurn - 1}, поэтому тебе нельзя`);
     return;
   }
   const targetedPlayer = prompt(
-    `В кого выстрелить, брат? 1? 2? 3? Ты, кстати, ${gameState.whoseTurn - 1}`
+    `В кого выстрелить, брат? 1? 2? 3? Ты, кстати, ${gameState.whoseTurn}`
   );
 };
 
@@ -90,11 +90,12 @@ const gameTurn = function () {
 console.log(gamePlayers);
 
 btnTurn.addEventListener(`click`, function () {
-  gameTurn();
   turnChanger();
+  gameTurn();
+  console.log(`Ход по gameTurn: `, gameState.turnCounter);
 });
 
 btnUseCard.addEventListener(`click`, function () {
   useCards();
-  console.log(gameState.turnCounter);
+  console.log(`Ход по useCards: `, gameState.turnCounter);
 });
