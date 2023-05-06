@@ -1,4 +1,4 @@
-import { deck } from "./deck.js";
+import { deck, usedCards } from "./deck.js";
 import { makePlayers } from "./players.js";
 
 const btnTurn = document.querySelector(`.btn--turn`);
@@ -6,24 +6,23 @@ const btnUseCard = document.querySelector(`.btn--useCard`);
 
 const gamePlayers = makePlayers();
 
-const getCardStart = (player) => {
-  // В самом начале берем то количество карт, сколько у нас жизней
-  if (gamePlayers[gameState.whoseTurn - 1].isFirstTurn) {
-    for (let i = 0; i < player.lives; i++) {
+const getCardStart = () => {
+  // В самом начале раздается то количество карт, сколько у нас жизней
+  for (let i = 0; i < gamePlayers.length; i++) {
+    for (let j = 0; j < gamePlayers[i].lives; j++) {
       let shiftedCards = deck.shift();
-      player.cardsInHand.push(shiftedCards);
+      gamePlayers[i].cardsInHand.push(shiftedCards);
     }
-    gamePlayers[gameState.whoseTurn - 1].isFirstTurn = false;
   }
 };
 
-const getCardTurn = () => {
+const getCardTurn = (player) => {
   // Каждый ход берем две карты из колоды
   for (let i = 0; i < 2; i++) {
     let shiftedCards = deck.shift();
-    player1Cards.push(shiftedCards);
+    player.cardsInHand.push(shiftedCards);
   }
-  return player1Cards;
+  return player;
 };
 
 const turnChanger = () => {
@@ -36,27 +35,48 @@ const turnChanger = () => {
 const turnState = function () {
   // Функция смотрит чей ход и сколько карт нужно брать
   let turnPlayer = gamePlayers[gameState.whoseTurn - 1];
+  getCardTurn(turnPlayer);
   console.log(
     `Сейчас ход: ${turnPlayer.character}. Игрок ${gameState.whoseTurn} в списке`
   );
-  getCardStart(turnPlayer);
+  // getCardStart(turnPlayer);
 
   gameState.turnCounter++;
-  console.log(`Держит в руке ${turnPlayer.cardsInHand.length} карты!`);
+
+  console.log(`Игрок берет две карты из колоды`);
+  console.log(`Теперь у игрока в руке ${turnPlayer.cardsInHand.length} карты!`);
   console.log(turnPlayer.cardsInHand);
   console.log(`В колоде ${deck.length} карт`);
-  console.log(gameState.whoseTurn);
-  console.log(gameState.turnCounter);
 };
 
 const useCards = function () {
-  if (gameState.whoseTurn <= 0) {
-    alert(`Ты сейчас ${gameState.whoseTurn - 1}, поэтому тебе нельзя`);
+  // Функция эмулирует использование карт (пока это только бэнг)
+  if (gameState.turnCounter <= 1) {
+    alert(`Игра еще не началась!`);
     return;
   }
-  const targetedPlayer = prompt(
-    `В кого выстрелить, брат? 1? 2? 3? Ты, кстати, ${gameState.whoseTurn}`
+  const hasBang = gamePlayers[gameState.whoseTurn - 1].cardsInHand.some(
+    (card) => card.Modificanto === "Bang!"
   );
+  if (hasBang) {
+    const targetedPlayer = Number(
+      prompt(
+        `В кого cтреляем, ковбой? 0? 1? 2? Ты, кстати, ${
+          gameState.whoseTurn - 1
+        }`
+      )
+    );
+
+    let shiftedCards;
+
+    gamePlayers[targetedPlayer].lives--;
+    console.log(
+      `Жизней у ${gamePlayers[targetedPlayer].character}`,
+      gamePlayers[targetedPlayer].lives
+    );
+  } else {
+    alert(`У тебя нет бэнга, приятель`);
+  }
 };
 
 let gameState = {
@@ -90,6 +110,12 @@ const gameTurn = function () {
 console.log(gamePlayers);
 
 btnTurn.addEventListener(`click`, function () {
+  if (gameState.turnCounter === 0) {
+    getCardStart();
+    console.log(`Игра началась!`);
+    gameState.turnCounter++;
+    return;
+  }
   turnChanger();
   gameTurn();
   console.log(`Ход по gameTurn: `, gameState.turnCounter);
