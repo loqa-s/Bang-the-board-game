@@ -35,6 +35,7 @@ const findCardInHand = function (cardWeAreLooking) {
 };
 
 const doctorsOffice = function (playerNumber) {
+  // функция следит за состоянием здоровья игрока, в которого кидают БЭНГ
   let tempPlayer = gamePlayers[playerNumber];
   if (!tempPlayer.isKilled) {
     if (tempPlayer.lives === 1) {
@@ -48,6 +49,31 @@ const doctorsOffice = function (playerNumber) {
   } else {
     alert(`${tempPlayer.character} уже убит. ⚰`);
   }
+};
+
+const usedCardIntoUsedCardsDeck = function (cardModificanto) {
+  // Индексируем ипользуемые карты и убираем их из руки игрока, при использовании
+  const tempPlayer = gamePlayers[gameState.whoseTurn - 1];
+  const tempPlayerCardsInHand = tempPlayer.cardsInHand;
+  const checkIndexOfaCard = tempPlayerCardsInHand.findIndex(
+    (card) => card.Modificanto === String(cardModificanto)
+  );
+  usedCards.push(tempPlayerCardsInHand.splice(checkIndexOfaCard, 1));
+
+  /*TODO: эта функция должна убрать багу с вложенностью объектов у usedCards, но ее нужно доделать
+   и расположить в правильном месте, но пока она будет лежать здесь!
+
+  function transformUsedCards() {
+    return usedCards.map(function (cards) {
+      return cards.reduce(function (a, c) {
+        a[c[0]] = c[1];
+        return a;
+      }, {});
+    });
+  }
+  */
+
+  return checkIndexOfaCard;
 };
 
 const turnChanger = () => {
@@ -84,13 +110,13 @@ const turnState = function () {
   }
 };
 
-const useCards = function () {
+const useCards = function (cardModificanto) {
   // Функция эмулирует использование карт (пока это только бэнг)
   if (gameState.turnCounter <= 1) {
     alert(`Игра еще не началась!`);
     return;
   }
-  if (findCardInHand("Bang!")) {
+  if (findCardInHand(cardModificanto)) {
     const targetedPlayerNumber = Number(
       prompt(
         `В кого cтреляем, ковбой? 0? 1? 2? Ты, кстати, ${
@@ -101,6 +127,7 @@ const useCards = function () {
 
     if (targetedPlayerNumber !== gameState.whoseTurn - 1) {
       doctorsOffice(targetedPlayerNumber);
+      usedCardIntoUsedCardsDeck(cardModificanto);
     } else if (targetedPlayerNumber === gameState.whoseTurn - 1) {
       alert(`В себя стрелять не надо, подумай о близких`);
       return;
@@ -155,6 +182,6 @@ btnTurn.addEventListener(`click`, function () {
 });
 
 btnUseCard.addEventListener(`click`, function () {
-  useCards();
+  useCards("Bang!");
   console.log(`LOG: Ход по useCards: `, gameState.turnCounter);
 });

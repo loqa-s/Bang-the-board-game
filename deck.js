@@ -108,5 +108,5 @@ function getDeck() {
   return moddedDeck;
 }
 
-export const usedCards = {};
+export const usedCards = [];
 export const deck = getDeck();
