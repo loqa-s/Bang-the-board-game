@@ -25,6 +25,31 @@ const getCardTurn = (player) => {
   return player;
 };
 
+const findCardInHand = function (cardWeAreLooking) {
+  // Проверяем, есть ли в руке нужная карта
+  let tempCards = gamePlayers[gameState.whoseTurn - 1].cardsInHand;
+  let checkIfCardsInHand = tempCards.some(
+    (card) => card.Modificanto === String(cardWeAreLooking)
+  );
+  return checkIfCardsInHand;
+};
+
+const doctorsOffice = function (playerNumber) {
+  let tempPlayer = gamePlayers[playerNumber];
+  if (!tempPlayer.isKilled) {
+    if (tempPlayer.lives === 1) {
+      tempPlayer.lives--;
+      tempPlayer.isKilled = true;
+      console.log(`⚰ Вы убили ${tempPlayer.character} ⚰`);
+    } else {
+      tempPlayer.lives--;
+      console.log(`Жизней у ${tempPlayer.character} =`, tempPlayer.lives);
+    }
+  } else {
+    alert(`${tempPlayer.character} уже убит. ⚰`);
+  }
+};
+
 const turnChanger = () => {
   //меняем ходы в gameState, определяя чей сейчас ход.
   gameState.whoseTurn === gameState.numberPlayers
@@ -35,18 +60,28 @@ const turnChanger = () => {
 const turnState = function () {
   // Функция смотрит чей ход и сколько карт нужно брать
   let turnPlayer = gamePlayers[gameState.whoseTurn - 1];
-  getCardTurn(turnPlayer);
-  console.log(
-    `Сейчас ход: ${turnPlayer.character}. Игрок ${gameState.whoseTurn} в списке`
-  );
-  // getCardStart(turnPlayer);
+  if (turnPlayer.lives === 0) {
+    console.log(
+      `${turnPlayer.character} убит. Дальнейшая игра за персонажа невозможна.`
+    );
+  } else {
+    getCardTurn(turnPlayer);
+    console.log(
+      `
+      Сейчас ход ${turnPlayer.character}, ${gameState.whoseTurn} в списке. Он(а) берет 2 карты из колоды.
+      Игрок: 
+      🤠: ${turnPlayer.character}
+      🩸: ${turnPlayer.lives} жизни
+      🃏: В руке ${turnPlayer.cardsInHand.length} карт.`,
+      turnPlayer.cardsInHand,
+      `
+      `
+    );
 
-  gameState.turnCounter++;
+    gameState.turnCounter++;
 
-  console.log(`Игрок берет две карты из колоды`);
-  console.log(`Теперь у игрока в руке ${turnPlayer.cardsInHand.length} карты!`);
-  console.log(turnPlayer.cardsInHand);
-  console.log(`В колоде ${deck.length} карт`);
+    console.log(`LOG: В колоде ${deck.length} карт`);
+  }
 };
 
 const useCards = function () {
@@ -55,11 +90,8 @@ const useCards = function () {
     alert(`Игра еще не началась!`);
     return;
   }
-  const hasBang = gamePlayers[gameState.whoseTurn - 1].cardsInHand.some(
-    (card) => card.Modificanto === "Bang!"
-  );
-  if (hasBang) {
-    const targetedPlayer = Number(
+  if (findCardInHand("Bang!")) {
+    const targetedPlayerNumber = Number(
       prompt(
         `В кого cтреляем, ковбой? 0? 1? 2? Ты, кстати, ${
           gameState.whoseTurn - 1
@@ -67,13 +99,14 @@ const useCards = function () {
       )
     );
 
-    let shiftedCards;
-
-    gamePlayers[targetedPlayer].lives--;
-    console.log(
-      `Жизней у ${gamePlayers[targetedPlayer].character}`,
-      gamePlayers[targetedPlayer].lives
-    );
+    if (targetedPlayerNumber !== gameState.whoseTurn - 1) {
+      doctorsOffice(targetedPlayerNumber);
+    } else if (targetedPlayerNumber === gameState.whoseTurn - 1) {
+      alert(`В себя стрелять не надо, подумай о близких`);
+      return;
+    } else {
+      return;
+    }
   } else {
     alert(`У тебя нет бэнга, приятель`);
   }
@@ -118,10 +151,10 @@ btnTurn.addEventListener(`click`, function () {
   }
   turnChanger();
   gameTurn();
-  console.log(`Ход по gameTurn: `, gameState.turnCounter);
+  console.log(`LOG: Ход по gameTurn: `, gameState.turnCounter);
 });
 
 btnUseCard.addEventListener(`click`, function () {
   useCards();
-  console.log(`Ход по useCards: `, gameState.turnCounter);
+  console.log(`LOG: Ход по useCards: `, gameState.turnCounter);
 });
