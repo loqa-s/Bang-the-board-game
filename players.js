@@ -32,6 +32,7 @@ const createPlayer = function () {
   let player = {
     nickName: `TESTING`,
     character: characters[numberCharacter].name,
+    characterID: numberCharacter,
     lives: characters[numberCharacter].lives,
     role: roles[numberRole],
     note: characters[numberCharacter].note,

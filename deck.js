@@ -21,7 +21,7 @@ const values = [
   "A",
   "A",
 ];
-const Mods = [
+const mods = [
   `Duel`,
   `Duel`,
   `Duel`,
@@ -67,19 +67,19 @@ const Mods = [
   `General Store`,
 ];
 
-function fillMods() {
+function fillmods() {
   for (let i = 0; i < 25; i++) {
     let card = "Bang!";
-    Mods.push(card);
+    mods.push(card);
   }
 
   for (let i = 0; i < 12; i++) {
     let card = "Missed!";
-    Mods.push(card);
+    mods.push(card);
   }
 }
 
-fillMods();
+fillmods();
 
 function getDeck() {
   let deck = new Array();
@@ -93,7 +93,7 @@ function getDeck() {
   }
 
   const moddedDeck = deck.map((item, i) => {
-    return { Value: item.Value, Suit: item.Suit, Modificanto: Mods[i] };
+    return { Value: item.Value, Suit: item.Suit, Modificanto: mods[i] };
   });
 
   for (let i = 0; i < 1000; i++) {
