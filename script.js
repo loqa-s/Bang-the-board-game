@@ -1,6 +1,6 @@
 import { deck, usedCards } from "./deck.js";
 import { makePlayers } from "./players.js";
-import { useCards } from "./cards.js";
+import { useFunctionalCards } from "./cards.js";
 
 const btnTurn = document.querySelector(`.btn--turn`);
 const btnUseCard = document.querySelector(`.btn--useCard`);
@@ -104,13 +104,13 @@ btnTurn.addEventListener(`click`, function () {
 });
 
 btnUseCard.addEventListener(`click`, function () {
-  useCards("Bang!");
-  console.log(`LOG: Ход по useCards: `, gameState.turnCounter);
+  useFunctionalCards("Bang!");
+  console.log(`LOG: Ход по useFunctionalCards: `, gameState.turnCounter);
 });
 
 btnUseCardBeer.addEventListener(`click`, function () {
-  useCards("Beer");
-  console.log(`LOG: Ход по useCards-Beer: `, gameState.turnCounter);
+  useFunctionalCards("Beer");
+  console.log(`LOG: Ход по useFunctionalCards-Beer: `, gameState.turnCounter);
 });
 
 export { gameState };

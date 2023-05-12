@@ -38,7 +38,8 @@ const usedCardIntoUsedCardsDeck = function (cardModificanto) {
   );
   usedCards.push(tempPlayerCardsInHand.splice(checkIndexOfaCard, 1));
 
-  /*TODO: эта функция должна убрать багу с вложенностью объектов у usedCards, но ее нужно доделать
+  /*
+    TODO: эта функция должна убрать багу с вложенностью объектов у usedCards, но ее нужно доделать
      и расположить в правильном месте, но пока она будет лежать здесь!
   
     function transformUsedCards() {
@@ -55,6 +56,7 @@ const usedCardIntoUsedCardsDeck = function (cardModificanto) {
 };
 
 const healthCheck = function () {
+  // функция сравнивает кол-во жизней у изначального персонажа и актуальные
   const turnPlayer = gamePlayers[gameState.whoseTurn - 1];
   if (turnPlayer.lives === characters[turnPlayer.characterID].lives) {
     return false;
@@ -63,8 +65,8 @@ const healthCheck = function () {
   }
 };
 
-const useCards = function (cardModificanto) {
-  // Функция эмулирует использование карт (пока это только бэнг)
+const useFunctionalCards = function (cardModificanto) {
+  // Функция эмулирует использование функциональных карт (пока это только бэнг и пиво)
   let turnPlayer = gamePlayers[gameState.whoseTurn - 1];
   if (gameState.turnCounter <= 1) {
     alert(`Игра еще не началась!`);
@@ -113,4 +115,6 @@ const useCards = function (cardModificanto) {
   }
 };
 
-export { useCards };
+const useBuffCards = function () {};
+
+export { useFunctionalCards };
